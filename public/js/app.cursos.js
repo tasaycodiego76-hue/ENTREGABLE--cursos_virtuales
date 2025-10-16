@@ -82,9 +82,6 @@ categoria_id.addEventListener('change', async (e) => {
 subcategoria_id.addEventListener('change', (e) => {
   const subcategoriaId = e.target.value
   curso.disabled = !subcategoriaId
-  if (subcategoriaId) {
-    curso.focus()
-  }
 })
 
 curso.addEventListener('input', (e) => {
@@ -98,10 +95,6 @@ curso.addEventListener('input', (e) => {
   precio.disabled = !tieneCurso
   docente_id.disabled = !tieneCurso
   btnGuardar.disabled = !tieneCurso
-  
-  if (tieneCurso) {
-    titulo.focus()
-  }
 })
 
 async function cargarDocentes() {
@@ -168,6 +161,7 @@ async function eliminarCurso(id, tituloCurso) {
 
       const result = await response.json()
       console.log(result)
+      alert(result.mensaje)
       obtenerCursos()
 
     } catch(e) {
@@ -248,6 +242,7 @@ formulario.addEventListener('submit', async (event) => {
     obtenerCursos()
   } catch(e) {
     console.error(e)
+    alert('Error al procesar la solicitud')
   }
 })
 
