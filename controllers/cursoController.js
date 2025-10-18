@@ -1,18 +1,16 @@
 const db = require('../config/db')
 
-// ========== CRUD DE CURSOS ==========
-
 exports.crearCurso = async (req, res) => {
-  const {curso, titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id} = req.body
+  const {curso, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id} = req.body
 
-  if (!curso || !titulo || !descripcion || !fecha_inicio || !fecha_fin || !duracion_horas || !precio || subcategoria_id == undefined || docente_id == undefined){
+  if (!curso || !fecha_inicio || !fecha_fin || !duracion_horas || !precio || subcategoria_id == undefined || docente_id == undefined){
     return res.status(400).json({mensaje: 'Falta completar los campos obligatorios'})
   }
 
-  const sql = "INSERT INTO curso (curso, titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id) VALUES (?,?,?,?,?,?,?,?,?)"
+  const sql = "INSERT INTO curso (curso, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id) VALUES (?,?,?,?,?,?,?)"
 
   try{
-    const [result] = await db.query(sql, [curso, titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id])
+    const [result] = await db.query(sql, [curso, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id])
 
     res.status(201).json({
       id: result.insertId,
@@ -25,27 +23,7 @@ exports.crearCurso = async (req, res) => {
 }
 
 exports.obtenerCursos = async (req, res) => {
-  const sql = `
-    SELECT 
-      c.id, 
-      c.curso,
-      c.titulo, 
-      c.descripcion, 
-      c.fecha_inicio, 
-      c.fecha_fin, 
-      c.duracion_horas, 
-      c.precio,
-      c.subcategoria_id,
-      c.docente_id,
-      cat.nombre as categoria,
-      s.nombre as subcategoria,
-      CONCAT(d.nombre, ' ', d.apellido) as docente
-    FROM curso c
-    INNER JOIN subcategoria s ON c.subcategoria_id = s.id
-    INNER JOIN categoria cat ON s.categoria_id = cat.id
-    INNER JOIN docente d ON c.docente_id = d.id
-    ORDER BY c.id DESC
-  `
+  const sql = "SELECT * FROM vista_cursos ORDER BY id DESC"
 
   try{
     const [cursos] = await db.query(sql)
@@ -58,28 +36,7 @@ exports.obtenerCursos = async (req, res) => {
 
 exports.obtenerCursoPorId = async (req, res) => {
   const { id } = req.params
-
-  const sql = `
-    SELECT 
-      c.id, 
-      c.curso,
-      c.titulo, 
-      c.descripcion, 
-      c.fecha_inicio, 
-      c.fecha_fin, 
-      c.duracion_horas, 
-      c.precio,
-      c.subcategoria_id,
-      c.docente_id,
-      cat.nombre as categoria,
-      s.nombre as subcategoria,
-      CONCAT(d.nombre, ' ', d.apellido) as docente
-    FROM curso c
-    INNER JOIN subcategoria s ON c.subcategoria_id = s.id
-    INNER JOIN categoria cat ON s.categoria_id = cat.id
-    INNER JOIN docente d ON c.docente_id = d.id
-    WHERE c.id = ?
-  `
+  const sql = "SELECT * FROM vista_cursos WHERE id = ?"
 
   try{
     const [cursos] = await db.query(sql, [id])
@@ -97,16 +54,16 @@ exports.obtenerCursoPorId = async (req, res) => {
 
 exports.actualizarCurso = async (req, res) => {
   const { id } = req.params
-  const { curso, titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id } = req.body
+  const { curso, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id } = req.body
 
-  if (!curso || !titulo || !descripcion || !fecha_inicio || !fecha_fin || !duracion_horas || !precio || subcategoria_id == undefined || docente_id == undefined){
+  if (!curso || !fecha_inicio || !fecha_fin || !duracion_horas || !precio || subcategoria_id == undefined || docente_id == undefined){
     return res.status(400).json({mensaje: 'Debe ingresar los campos obligatorios'})
   }
 
-  const sql = "UPDATE curso SET curso = ?, titulo = ?, descripcion = ?, fecha_inicio = ?, fecha_fin = ?, duracion_horas = ?, precio = ?, subcategoria_id = ?, docente_id = ? WHERE id = ?"
+  const sql = "UPDATE curso SET curso = ?, fecha_inicio = ?, fecha_fin = ?, duracion_horas = ?, precio = ?, subcategoria_id = ?, docente_id = ? WHERE id = ?"
 
   try{
-    const [result] = await db.query(sql, [curso, titulo, descripcion, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id, id])
+    const [result] = await db.query(sql, [curso, fecha_inicio, fecha_fin, duracion_horas, precio, subcategoria_id, docente_id, id])
 
     if (result.affectedRows === 0){
       return res.status(404).json({mensaje: 'No encontramos el curso con ese ID'})
@@ -137,7 +94,6 @@ exports.eliminarCurso = async (req, res) => {
   }
 }
 
-
 exports.obtenerCategorias = async (req, res) => {
   const sql = "SELECT id, nombre FROM categoria ORDER BY nombre"
 
@@ -150,7 +106,6 @@ exports.obtenerCategorias = async (req, res) => {
   }
 }
 
-
 exports.obtenerSubcategorias = async (req, res) => {
   const sql = "SELECT id, nombre, categoria_id FROM subcategoria ORDER BY nombre"
 
@@ -162,8 +117,6 @@ exports.obtenerSubcategorias = async (req, res) => {
     res.status(500).json({mensaje: 'Error interno del servidor'})
   }
 }
-
-
 
 exports.obtenerDocentes = async (req, res) => {
   const sql = "SELECT id, nombre, apellido, email FROM docente ORDER BY apellido, nombre"

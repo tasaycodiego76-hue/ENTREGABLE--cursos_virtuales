@@ -32,8 +32,9 @@
             <strong>Complete los datos solicitados</strong>
           </div>
           <div class="card-body">
-            <div class="row g-2 mb-2">
-              <div class="col-md-3">
+            <!-- CATEGORÍA -->
+            <div class="row mb-2">
+              <div class="col-12">
                 <div class="form-floating">
                   <select
                     name="categoria_id"
@@ -43,10 +44,14 @@
                   >
                     <option value="">Seleccione</option>
                   </select>
-                  <label for="categoria_id">Categoría</label>
+                  <label for="categoria_id">Categorías</label>
                 </div>
               </div>
-              <div class="col-md-3">
+            </div>
+
+            <!-- SUBCATEGORÍA -->
+            <div class="row mb-2">
+              <div class="col-12">
                 <div class="form-floating">
                   <select
                     name="subcategoria_id"
@@ -55,73 +60,32 @@
                     required
                     disabled
                   >
-                    <option value="">Primero categoría</option>
+                    <option value="">Seleccione</option>
                   </select>
-                  <label for="subcategoria_id">Subcategoría</label>
+                  <label for="subcategoria_id">Subcategorías</label>
                 </div>
               </div>
-              <div class="col-md-3">
+            </div>
+
+            <!-- CURSO -->
+            <div class="row mb-2">
+              <div class="col-12">
                 <div class="form-floating">
                   <input
                     type="text"
                     class="form-control rounded-0"
                     id="curso"
-                    minlength="3"
                     name="curso"
-                    placeholder="Ej: Python"
+                    placeholder="Nombre del curso"
                     required
                     disabled
                   />
-                  <label for="curso">Curso</label>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-floating">
-                  <select
-                    name="docente_id"
-                    id="docente_id"
-                    class="form-select rounded-0"
-                    required
-                    disabled
-                  >
-                    <option value="">Primero curso</option>
-                  </select>
-                  <label for="docente_id">Docente</label>
+                  <label for="curso">Descripcion del Curso</label>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12 mb-2">
-                <div class="form-floating">
-                  <input
-                    type="text"
-                    class="form-control rounded-0"
-                    id="titulo"
-                    minlength="5"
-                    name="titulo"
-                    placeholder="Ej: Aprende Python desde cero"
-                    required
-                    disabled
-                  />
-                  <label for="titulo">Título</label>
-                </div>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-12">
-                <div class="form-floating">
-                  <textarea
-                    class="form-control rounded-0"
-                    id="descripcion"
-                    name="descripcion"
-                    style="height: 100px"
-                    required
-                    disabled
-                  ></textarea>
-                  <label for="descripcion">Descripción</label>
-                </div>
-              </div>
-            </div>
+
+            <!-- FECHA INICIO | FECHA FIN -->
             <div class="row g-2 mb-2">
               <div class="col-md-6">
                 <div class="form-floating">
@@ -133,7 +97,7 @@
                     required
                     disabled
                   />
-                  <label for="fecha_inicio">Fecha Inicio</label>
+                  <label for="fecha_inicio">Fecha de Inicio del Curso</label>
                 </div>
               </div>
               <div class="col-md-6">
@@ -146,25 +110,31 @@
                     required
                     disabled
                   />
-                  <label for="fecha_fin">Fecha Fin</label>
+                  <label for="fecha_fin">Fecha de Fin del Curso</label>
                 </div>
               </div>
             </div>
-            <div class="row g-2">
-              <div class="col-md-6">
+
+            <!-- DOCENTE -->
+            <div class="row mb-2">
+              <div class="col-12">
                 <div class="form-floating">
-                  <input
-                    type="number"
-                    name="duracion_horas"
-                    id="duracion_horas"
-                    class="form-control rounded-0"
-                    min="1"
+                  <select
+                    name="docente_id"
+                    id="docente_id"
+                    class="form-select rounded-0"
                     required
                     disabled
-                  />
-                  <label for="duracion_horas">Duración (Horas)</label>
+                  >
+                    <option value="">Seleccione</option>
+                  </select>
+                  <label for="docente_id">Docentes</label>
                 </div>
               </div>
+            </div>
+
+            <!-- PRECIO | DURACIÓN -->
+            <div class="row g-2">
               <div class="col-md-6">
                 <div class="form-floating">
                   <input
@@ -177,7 +147,21 @@
                     required
                     disabled
                   />
-                  <label for="precio">Precio</label>
+                  <label for="precio">Precio del Curso</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-floating">
+                  <input
+                    type="number"
+                    name="duracion_horas"
+                    id="duracion_horas"
+                    class="form-control rounded-0"
+                    min="1"
+                    required
+                    disabled
+                  />
+                  <label for="duracion_horas">Duración del Curso en Horas</label>
                 </div>
               </div>
             </div>
@@ -199,37 +183,35 @@
         
         .table tbody tr 
           td:nth-child(1),
-          td:nth-child(11)
+          td:nth-child(10)
           { text-align: center; }
       </style>
 
       <div class="table-responsive mt-3">
         <table class="table table-bordered" id="tabla-cursos">
           <colgroup>
-            <col style="width: 4%;">
-            <col style="width: 10%;">
-            <col style="width: 16%;">
-            <col style="width: 11%;">
-            <col style="width: 11%;">
+            <col style="width: 5%;">
+            <col style="width: 15%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
+            <col style="width: 12%;">
             <col style="width: 8%;">
             <col style="width: 8%;">
             <col style="width: 6%;">
-            <col style="width: 7%;">
-            <col style="width: 10%;">
-            <col style="width: 9%;">
+            <col style="width: 8%;">
+            <col style="width: 14%;">
           </colgroup>
           <thead>
             <tr>
               <th class="text-center">ID</th>
-              <th>Curso</th>
-              <th>Título</th>
+              <th>Título del Curso</th>
               <th>Categoría</th>
               <th>Subcategoría</th>
-              <th>Fecha Inicio</th>
-              <th>Fecha Fin</th>
-              <th>Duración</th>
-              <th>Precio</th>
               <th>Docente</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Dur. (h)</th>
+              <th>Precio</th>
               <th class="text-center">Acciones</th>
             </tr>
           </thead>

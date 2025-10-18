@@ -8,8 +8,6 @@ const categoria_id = document.getElementById('categoria_id')
 const subcategoria_id = document.getElementById('subcategoria_id')
 const curso = document.getElementById('curso')
 const docente_id = document.getElementById('docente_id')
-const titulo = document.getElementById('titulo')
-const descripcion = document.getElementById('descripcion')
 const fecha_inicio = document.getElementById('fecha_inicio')
 const fecha_fin = document.getElementById('fecha_fin')
 const duracion_horas = document.getElementById('duracion_horas')
@@ -47,8 +45,6 @@ categoria_id.addEventListener('change', async (e) => {
   
   subcategoria_id.disabled = true
   curso.disabled = true
-  titulo.disabled = true
-  descripcion.disabled = true
   fecha_inicio.disabled = true
   fecha_fin.disabled = true
   duracion_horas.disabled = true
@@ -87,8 +83,6 @@ subcategoria_id.addEventListener('change', (e) => {
 curso.addEventListener('input', (e) => {
   const tieneCurso = e.target.value.trim().length >= 3
   
-  titulo.disabled = !tieneCurso
-  descripcion.disabled = !tieneCurso
   fecha_inicio.disabled = !tieneCurso
   fecha_fin.disabled = !tieneCurso
   duracion_horas.disabled = !tieneCurso
@@ -122,16 +116,16 @@ async function obtenerCursos() {
   cursos.forEach(cursoItem => {
     const row = tabla.insertRow()
 
+    // ORDEN CORRECTO: ID | Título | Categoría | Subcategoría | Docente | Inicio | Fin | Duración | Precio | Acciones
     row.insertCell().textContent = cursoItem.id
     row.insertCell().textContent = cursoItem.curso
-    row.insertCell().textContent = cursoItem.titulo
     row.insertCell().textContent = cursoItem.categoria
     row.insertCell().textContent = cursoItem.subcategoria
+    row.insertCell().textContent = cursoItem.docente
     row.insertCell().textContent = cursoItem.fecha_inicio
     row.insertCell().textContent = cursoItem.fecha_fin
     row.insertCell().textContent = cursoItem.duracion_horas + ' hrs'
     row.insertCell().textContent = 'S/ ' + cursoItem.precio
-    row.insertCell().textContent = cursoItem.docente
     
     const actionCell = row.insertCell()
 
@@ -143,20 +137,20 @@ async function obtenerCursos() {
     const deleteButton = document.createElement('button')
     deleteButton.textContent = 'Eliminar'
     deleteButton.classList.add('btn', 'btn-danger', 'btn-sm')
-    deleteButton.onclick = () => eliminarCurso(cursoItem.id, cursoItem.titulo)
+    deleteButton.onclick = () => eliminarCurso(cursoItem.id, cursoItem.curso)
 
     actionCell.appendChild(editButton)
     actionCell.appendChild(deleteButton)
   })
 }
 
-async function eliminarCurso(id, tituloCurso) {
-  if (confirm(`¿Está seguro de eliminar el curso: ${tituloCurso}?`)) { 
+async function eliminarCurso(id, nombreCurso) {
+  if (confirm(`¿Está seguro de eliminar el curso: ${nombreCurso}?`)) { 
     try {
       const response = await fetch(API_URL + `/${id}`, { method: 'delete' })
       
       if (!response.ok) {
-        throw new Error(`Error al eliminar: ${tituloCurso}`)
+        throw new Error(`Error al eliminar: ${nombreCurso}`)
       }
 
       const result = await response.json()
@@ -188,8 +182,6 @@ async function cargarParaEdicion(cursoItem) {
       curso.value = cursoItem.curso
       curso.dispatchEvent(new Event('input'))
       
-      titulo.value = cursoItem.titulo
-      descripcion.value = cursoItem.descripcion
       fecha_inicio.value = cursoItem.fecha_inicio
       fecha_fin.value = cursoItem.fecha_fin
       duracion_horas.value = cursoItem.duracion_horas
@@ -206,8 +198,6 @@ formulario.addEventListener('submit', async (event) => {
 
   const data = {
     curso: curso.value,
-    titulo: titulo.value,
-    descripcion: descripcion.value,
     fecha_inicio: fecha_inicio.value,
     fecha_fin: fecha_fin.value,
     duracion_horas: parseInt(duracion_horas.value),
@@ -249,8 +239,6 @@ formulario.addEventListener('submit', async (event) => {
 function resetearFormulario() {
   subcategoria_id.disabled = true
   curso.disabled = true
-  titulo.disabled = true
-  descripcion.disabled = true
   fecha_inicio.disabled = true
   fecha_fin.disabled = true
   duracion_horas.disabled = true
