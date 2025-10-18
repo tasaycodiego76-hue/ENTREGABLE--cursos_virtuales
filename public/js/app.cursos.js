@@ -116,7 +116,6 @@ async function obtenerCursos() {
   cursos.forEach(cursoItem => {
     const row = tabla.insertRow()
 
-    // ORDEN CORRECTO: ID | Título | Categoría | Subcategoría | Docente | Inicio | Fin | Duración | Precio | Acciones
     row.insertCell().textContent = cursoItem.id
     row.insertCell().textContent = cursoItem.curso
     row.insertCell().textContent = cursoItem.categoria
